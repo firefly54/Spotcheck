@@ -88,7 +88,7 @@ def resoure_path(relative_path):
     except Exception:
         base_path = os.path.abspath(".")
 
-    return os.path.join(base_path, relative_path
+    return os.path.join(base_path, relative_path)
 ############################################################ RESOURCE PATH - END ###################################################################
 
 ############################################################ CAMERA INIT - START ###################################################################
@@ -1073,7 +1073,17 @@ def setid():
                     pass
                 root.attributes('-fullscreen', True)
                 idpos_button[n]['bg'] = 'lavender'
-                idpos_button[n]['text'] = '#'+str(n+1)
+                if(n<=5):
+                	idpos_button[n]['text'] = '#'+str(n+1)
+                if(n>5 and n<=11):
+                	idpos_button[n]['text'] = '#'+str(n-1)
+                if(n>11 and n<=17):
+                	idpos_button[n]['text'] = '#'+str(n-2)
+                if(n>17 and n<=23):
+                	idpos_button[n]['text'] = '#'+str(n-3)
+                if(n>23):
+                	idpos_button[n]['text'] = '#'+str(n-4)
+
                 msgbox = messagebox.showwarning(" ","Please enter the ID!")
             else:
                 try:
@@ -1178,7 +1188,6 @@ def setid():
             else:
                 k=k+1
                 idpos_button[i]['text']='#'+str(k)
-
 
     def cancel_click():
         msg = messagebox.askquestion("Cancel", "Do you want to cancel without saving?")
