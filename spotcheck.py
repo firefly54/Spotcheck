@@ -127,7 +127,7 @@ def sorting_xy(contour):
 ########################################################## SORTING CONTOURS - END ##################################################################
 
 ########################################################## IMAGE ANALYSIS - START ##################################################################
-def process_image(image_name, start_point=(290,38), end_point=(508,338)):
+def process_image(image_name, start_point=(279,81), end_point=(496,376)):
     image = cv2.imread(image_name)
     blur_img = cv2.GaussianBlur(image.copy(), (35,35), 0)
     gray_img = cv2.cvtColor(blur_img, cv2.COLOR_BGR2GRAY)
@@ -269,15 +269,18 @@ def process_image(image_name, start_point=(290,38), end_point=(508,338)):
             print('%.1f'%(result_list[i]), end = ' | ')
 
     blurori_img = cv2.GaussianBlur(image.copy(), (25,25), 0)
-    global thr3l_set
+    global thr3l_set, id_list
     for i in range(len(sorted_contours1)):
-        if(result_list[i]<= 10):
-            cv2.drawContours(blurori_img, sorted_contours1, i, (255,255,0), thickness = 2)
+        if(id_list[i]=='N/A'):
+            cv2.drawContours(blurori_img, sorted_contours1, i, (0,0,0), thickness = -1)
         else:
-            if(result_list[i] <= float(thr3l_set)):
+            if(result_list[i]<=10):
                 cv2.drawContours(blurori_img, sorted_contours1, i, (255,255,0), thickness = 2)
             else:
-                cv2.drawContours(blurori_img, sorted_contours1, i, (0,0,255), thickness = 2)
+                if(result_list[i] <= float(thr3l_set)):
+                    cv2.drawContours(blurori_img, sorted_contours1, i, (255,255,0), thickness = 2)
+                else:
+                    cv2.drawContours(blurori_img, sorted_contours1, i, (0,0,255), thickness = 2)
 
     return (result_list, blurori_img)
 ########################################################### IMAGE ANALYSIS - END ###################################################################
@@ -1020,7 +1023,7 @@ def mainscreen():
 ########################################################### SET ID SCREEN - START ##################################################################
 def setid():
     global setid48clicked, setid25clicked
-  
+
     setid1_labelframe = LabelFrame(root, bg='white', width=800, height=600)
     setid1_labelframe.place(x=0,y=0)
 
@@ -1073,18 +1076,18 @@ def setid():
                 root.attributes('-fullscreen', True)
                 idpos_button[n]['bg'] = 'lavender'
                 if(setid48clicked==0):
-	                if(n<=5):
-	                	idpos_button[n]['text'] = '#'+str(n+1)
-	                if(n>5 and n<=11):
-	                	idpos_button[n]['text'] = '#'+str(n)
-	                if(n>11 and n<=17):
-	                	idpos_button[n]['text'] = '#'+str(n-1)
-	                if(n>17 and n<=23):
-	                	idpos_button[n]['text'] = '#'+str(n-2)
-	                if(n>23):
-	                	idpos_button[n]['text'] = '#'+str(n-3)
-	            else:
-	            	idpos_button[n]['text'] = '#'+str(n+1)
+                    if(n<=5):
+                        idpos_button[n]['text'] = '#'+str(n+1)
+                    if(n>5 and n<=11):
+                        idpos_button[n]['text'] = '#'+str(n)
+                    if(n>11 and n<=17):
+                        idpos_button[n]['text'] = '#'+str(n-1)
+                    if(n>17 and n<=23):
+                        idpos_button[n]['text'] = '#'+str(n-2)
+                    if(n>23):
+                        idpos_button[n]['text'] = '#'+str(n-3)
+                else:
+                    idpos_button[n]['text'] = '#'+str(n+1)
                 msgbox = messagebox.showwarning(" ","Please enter the ID!")
             else:
                 try:
@@ -1881,7 +1884,7 @@ def analysis():
 
                 t1_analysis = Image.open(output)
                 #t1_crop = t1_analysis.crop((start_point[0]-7, start_point[1]-7, end_point[0]+7, end_point[1]+7))
-                t1_crop = t1_analysis.crop((286-7, 80-7, 501+7, 370+7))
+                t1_crop = t1_analysis.crop((279-7, 81-7, 496+7, 376+7))
                 crop_width, crop_height = t1_crop.size
                 scale_percent = 75
                 width = int(crop_width * scale_percent / 100)
@@ -1956,7 +1959,7 @@ def analysis():
                 cv2.imwrite(output, t2_image)
                 t2_analysis = Image.open(output)
                 #t2_crop = t2_analysis.crop((start_point[0]-7, start_point[1]-7, end_point[0]+7, end_point[1]+7))
-                t2_crop = t2_analysis.crop((286-7, 80-7, 501+7, 370+7))
+                t2_crop = t2_analysis.crop((279-7, 81-7, 496+7, 376+7))
                 crop_width, crop_height = t2_crop.size
                 scale_percent = 75
                 width = int(crop_width * scale_percent / 100)
@@ -2032,7 +2035,7 @@ def analysis():
                 cv2.imwrite(output, t3_image)
                 t3_analysis = Image.open(output)
                 #t3_crop = t3_analysis.crop((start_point[0]-7, start_point[1]-7, end_point[0]+7, end_point[1]+7))
-                t3_crop = t3_analysis.crop((286-7, 80-7, 501+7, 370+7))
+                t3_crop = t3_analysis.crop((279-7, 81-7, 496+7, 376+7))
                 crop_width, crop_height = t3_crop.size
                 scale_percent = 75
                 width = int(crop_width * scale_percent / 100)
@@ -2103,7 +2106,7 @@ def analysis():
                 font2 = Font(bold=True)
                 thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
 
-                img = Img('/home/pi/sc48/ps.jpg')
+                img = Img('/home/pi/Spotcheck/ps.jpg')
                 img.height = 60
                 img.width = 224
                 img.anchor = 'B2'
