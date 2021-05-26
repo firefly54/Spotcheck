@@ -320,7 +320,7 @@ def mainscreen():
         homemc_labelframe = LabelFrame(mainscreen_labelframe, bg='white', width=624, height=478)
         homemc_labelframe.place(x=172,y=0)
 
-        logo_img = Image.open('/home/pi/sc48/logo.png')
+        logo_img = Image.open('/home/pi/Spotcheck/logo.png')
         logo_width, logo_height = logo_img.size
         scale_percent = 100
         width = int(logo_width * scale_percent / 100)
@@ -773,7 +773,7 @@ def mainscreen():
             button48['bg'] = 'lawn green'
             button25['bg'] = 'grey94'
 
-            s48_img = Image.open('/home/pi/sc48/48well.JPG')
+            s48_img = Image.open('/home/pi/Spotcheck/48well.JPG')
             s48_width, s48_height = s48_img.size
             scale_percent = 70
             width = int(s48_width * scale_percent / 100)
@@ -788,7 +788,7 @@ def mainscreen():
             button48['bg'] = 'grey94'
             button25['bg'] = 'lawn green'
 
-            s25_img = Image.open('/home/pi/sc48/25well.JPG')
+            s25_img = Image.open('/home/pi/Spotcheck/25well.JPG')
             s25_width, s25_height = s25_img.size
             scale_percent = 70
             width = int(s25_width * scale_percent / 100)
@@ -1253,13 +1253,13 @@ def setid():
 ###################################################### SET TEMPERATURES SCREEN - START #############################################################
 def settemp():
     if(covid19clicked==1):
-        fr = open("/home/pi/sc48/covid19saved.txt","r")
+        fr = open("/home/pi/Spotcheck/covid19saved.txt","r")
     if(tbclicked==1):
-        fr = open("/home/pi/sc48/tbsaved.txt","r")
+        fr = open("/home/pi/Spotcheck/tbsaved.txt","r")
     if(spotcheckclicked==1):
-        fr = open("/home/pi/sc48/scsaved.txt","r")
+        fr = open("/home/pi/Spotcheck/scsaved.txt","r")
     if(shrimpclicked==1):
-        fr = open("/home/pi/sc48/shrimpsaved.txt","r")
+        fr = open("/home/pi/Spotcheck/shrimpsaved.txt","r")
     t1 = fr.readline()[3:5]
     t2 = fr.readline()[3:5]
     t3 = fr.readline()[3:5]
@@ -1362,7 +1362,7 @@ def settemp():
 #     thres_labelframe = LabelFrame(settemptop_labelframe, text='THRESHOLD', bg='white', width=490, height=149)
 #     thres_labelframe.place(x=3,y=185)
 
-    cir_img = Image.open('/home/pi/sc48/cir.png')
+    cir_img = Image.open('/home/pi/Spotcheck/cir.png')
     cir_width, cir_height = cir_img.size
     scale_percent = 14
     width = int(cir_width * scale_percent / 100)
@@ -1523,13 +1523,13 @@ def settemp():
         if(msg=='yes'):
             messagebox.showinfo("","Save done!")
             if(covid19clicked==1):
-                fw = open("/home/pi/sc48/covid19saved.txt","w")
+                fw = open("/home/pi/Spotcheck/covid19saved.txt","w")
             if(tbclicked==1):
-                fw = open("/home/pi/sc48/tbsaved.txt","w")
+                fw = open("/home/pi/Spotcheck/tbsaved.txt","w")
             if(spotcheckclicked==1):
-                fw = open("/home/pi/sc48/scsaved.txt","w")
+                fw = open("/home/pi/Spotcheck/scsaved.txt","w")
             if(shrimpclicked==1):
-                fw = open("/home/pi/sc48/shrimpsaved.txt","w")
+                fw = open("/home/pi/Spotcheck/shrimpsaved.txt","w")
             fw.truncate(0)
             fw.writelines("T1="+t1_entry.get()[0:2]+"\n")
             fw.writelines("T2="+t2_entry.get()[0:2]+"\n")
@@ -1579,7 +1579,7 @@ def scanposition():
     scanposition_label = Label(scanposition_labelframe, bg='dodger blue', text='SAMPLES POSITION', font=("Courier",17,'bold'), width=20, height=1 )
     scanposition_label.place(x=257,y=12)
 
-    scan_img = Image.open('/home/pi/sc48/scan.png')
+    scan_img = Image.open('/home/pi/Spotcheck/scan.png')
     scan_width, scan_height = scan_img.size
     scale_percent = 100
     width = int(scan_width * scale_percent / 100)
