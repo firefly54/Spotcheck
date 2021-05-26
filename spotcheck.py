@@ -1020,8 +1020,7 @@ def mainscreen():
 ########################################################### SET ID SCREEN - START ##################################################################
 def setid():
     global setid48clicked, setid25clicked
-    print('setid48clicked:',setid48clicked)
-    print('setid25clicked:',setid25clicked)
+  
     setid1_labelframe = LabelFrame(root, bg='white', width=800, height=600)
     setid1_labelframe.place(x=0,y=0)
 
@@ -1073,17 +1072,19 @@ def setid():
                     pass
                 root.attributes('-fullscreen', True)
                 idpos_button[n]['bg'] = 'lavender'
-                if(n<=5):
-                	idpos_button[n]['text'] = '#'+str(n+1)
-                if(n>5 and n<=11):
-                	idpos_button[n]['text'] = '#'+str(n-1)
-                if(n>11 and n<=17):
-                	idpos_button[n]['text'] = '#'+str(n-2)
-                if(n>17 and n<=23):
-                	idpos_button[n]['text'] = '#'+str(n-3)
-                if(n>23):
-                	idpos_button[n]['text'] = '#'+str(n-4)
-
+                if(setid48clicked==0):
+	                if(n<=5):
+	                	idpos_button[n]['text'] = '#'+str(n+1)
+	                if(n>5 and n<=11):
+	                	idpos_button[n]['text'] = '#'+str(n)
+	                if(n>11 and n<=17):
+	                	idpos_button[n]['text'] = '#'+str(n-1)
+	                if(n>17 and n<=23):
+	                	idpos_button[n]['text'] = '#'+str(n-2)
+	                if(n>23):
+	                	idpos_button[n]['text'] = '#'+str(n-3)
+	            else:
+	            	idpos_button[n]['text'] = '#'+str(n+1)
                 msgbox = messagebox.showwarning(" ","Please enter the ID!")
             else:
                 try:
