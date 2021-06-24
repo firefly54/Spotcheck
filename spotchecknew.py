@@ -28,7 +28,6 @@ from openpyxl.drawing.image import Image as Img
 ############################################################ IMPORT MODULES - END ##################################################################
 
 ########################################################## GLOBAL VARIABLE - START #################################################################
-sidebar_font = font.Font(family='Helvetica', size=10, weight='bold')
 covid19clicked = 0
 tbclicked = 0
 spotcheckclicked = 0
@@ -323,27 +322,27 @@ def mainscreen():
     def power_click():
     	pass
 
-    home_button = Button(mainscreen_labelframe, bg="dodger blue", activebackground="dodger blue", text="HOME", fg='white', font=sidebar_font, borderwidth=0, height=4, width=20,command=home_click)
+    home_button = Button(mainscreen_labelframe, bg="dodger blue", activebackground="dodger blue", text="HOME", fg='white', font=('Helvetica',10,'bold'), borderwidth=0, height=4, width=20,command=home_click)
     home_button.place(x=1,y=1)
     home_canvas = Canvas(mainscreen_labelframe, bg="dodger blue", bd=0, highlightthickness=0, height=72, width=13)
     home_canvas.place(x=1,y=3)
-    setid_button = Button(mainscreen_labelframe, bg="dodger blue", activebackground="dodger blue", text="SET ID", fg='white', font=sidebar_font, borderwidth=0, height=4, width=20, command=setid_click)
+    setid_button = Button(mainscreen_labelframe, bg="dodger blue", activebackground="dodger blue", text="SET ID", fg='white', font=('Helvetica',10,'bold'), borderwidth=0, height=4, width=20, command=setid_click)
     setid_button.place(x=1,y=81)
     setid_canvas = Canvas(mainscreen_labelframe, bg="dodger blue", bd=0, highlightthickness=0, height=72, width=13)
     setid_canvas.place(x=1,y=83)
-    lamp_button = Button(mainscreen_labelframe, bg="dodger blue", activebackground="dodger blue", text="LAMP", fg='white', font=sidebar_font, borderwidth=0, height=4, width=20, command=lamp_click)
+    lamp_button = Button(mainscreen_labelframe, bg="dodger blue", activebackground="dodger blue", text="LAMP", fg='white', font=('Helvetica',10,'bold'), borderwidth=0, height=4, width=20, command=lamp_click)
     lamp_button.place(x=1,y=161)
     lamp_canvas = Canvas(mainscreen_labelframe, bg="dodger blue", bd=0, highlightthickness=0, height=72, width=13)
     lamp_canvas.place(x=1,y=163)
-    language_button = Button(mainscreen_labelframe, bg="dodger blue", activebackground="dodger blue", text="LANGUAGE", fg='white', font=sidebar_font, borderwidth=0, height=4, width=20, command=language_click)
+    language_button = Button(mainscreen_labelframe, bg="dodger blue", activebackground="dodger blue", text="LANGUAGE", fg='white', font=('Helvetica',10,'bold'), borderwidth=0, height=4, width=20, command=language_click)
     language_button.place(x=1,y=241)
     language_canvas = Canvas(mainscreen_labelframe, bg="dodger blue", bd=0, highlightthickness=0, height=72, width=13)
     language_canvas.place(x=1,y=243)
-    help_button = Button(mainscreen_labelframe, bg="dodger blue", activebackground="dodger blue", text="HELP", fg='white', font=sidebar_font, borderwidth=0, height=4, width=20, command=help_click)
+    help_button = Button(mainscreen_labelframe, bg="dodger blue", activebackground="dodger blue", text="HELP", fg='white', font=('Helvetica',10,'bold'), borderwidth=0, height=4, width=20, command=help_click)
     help_button.place(x=1,y=321)
     help_canvas = Canvas(mainscreen_labelframe, bg="dodger blue", bd=0, highlightthickness=0, height=72, width=13)
     help_canvas.place(x=1,y=323)
-    power_button = Button(mainscreen_labelframe, bg="dodger blue", activebackground="dodger blue", text="POWER", fg='white', font=sidebar_font, borderwidth=0, height=4, width=20, command=power_click)
+    power_button = Button(mainscreen_labelframe, bg="dodger blue", activebackground="dodger blue", text="POWER", fg='white', font=('Helvetica',10,'bold'), borderwidth=0, height=4, width=20, command=power_click)
     power_button.place(x=1,y=401)
     power_canvas = Canvas(mainscreen_labelframe, bg="dodger blue", bd=0, highlightthickness=0, height=72, width=13)
     power_canvas.place(x=1,y=403)
