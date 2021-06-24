@@ -61,10 +61,13 @@ start_point = (0,0)
 end_point = (0,0)
 setid48clicked = 0
 setid25clicked = 0
-thr1_set = 19.5
-thr2_set = 19.5
-thr3l_set = 20
-thr3h_set = 21
+t1_run = 0
+t2_run = 0
+t3_run = 0
+thr1_set = 11
+thr2_set = 11
+thr3l_set = 8.2
+thr3h_set = 9.2
 ########################################################### GLOBAL VARIABLE - END ##################################################################
 
 ########################################################## MAIN WINDOW INIT - START ################################################################
@@ -93,7 +96,7 @@ def resoure_path(relative_path):
 
 ############################################################ CAMERA INIT - START ###################################################################
 def camera_capture(output):
-    camera = PiCamera(framerate=Fraction(1,6), sensor_mode=3)
+    camera = PiCamera(framerate=Fraction(1,1), sensor_mode=3)
     camera.rotation = 180
     camera.iso = 200
     sleep(2)
@@ -127,7 +130,7 @@ def sorting_xy(contour):
 ########################################################## SORTING CONTOURS - END ##################################################################
 
 ########################################################## IMAGE ANALYSIS - START ##################################################################
-def process_image(image_name, start_point=(279,81), end_point=(496,376)):
+def process_image(image_name, start_point=(283,85), end_point=(497,372)):
     image = cv2.imread(image_name)
     blur_img = cv2.GaussianBlur(image.copy(), (35,35), 0)
     gray_img = cv2.cvtColor(blur_img, cv2.COLOR_BGR2GRAY)
@@ -269,19 +272,33 @@ def process_image(image_name, start_point=(279,81), end_point=(496,376)):
             print('%.1f'%(result_list[i]), end = ' | ')
 
     blurori_img = cv2.GaussianBlur(image.copy(), (25,25), 0)
-    global thr3l_set, id_list
+    global t1_run, t2_run, t3_run, thr1_set, thr2_set, thr3l_set, thr3h_set, id_list
     for i in range(len(sorted_contours1)):
         if(id_list[i]=='N/A'):
             cv2.drawContours(blurori_img, sorted_contours1, i, (0,0,0), thickness = -1)
         else:
-            if(result_list[i]<=10):
-                cv2.drawContours(blurori_img, sorted_contours1, i, (255,255,0), thickness = 2)
-            else:
-                if(result_list[i] <= float(thr3l_set)):
+            if(t1_run==0 and t2_run==0 and t3_run==0):
+                if(result_list[i]<=9):
                     cv2.drawContours(blurori_img, sorted_contours1, i, (255,255,0), thickness = 2)
                 else:
                     cv2.drawContours(blurori_img, sorted_contours1, i, (0,0,255), thickness = 2)
 
+            else:
+                if(t1_run==1):
+                    if(result_list[i] <= float(thr1_set)):
+                        cv2.drawContours(blurori_img, sorted_contours1, i, (255,255,0), thickness = 2)
+                    else:
+                        cv2.drawContours(blurori_img, sorted_contours1, i, (0,0,255), thickness = 2)
+                if(t2_run==1):
+                    if(result_list[i] <= float(thr2_set)):
+                        cv2.drawContours(blurori_img, sorted_contours1, i, (255,255,0), thickness = 2)
+                    else:
+                        cv2.drawContours(blurori_img, sorted_contours1, i, (0,0,255), thickness = 2)
+                if(t3_run==1):
+                    if(result_list[i] <= float(thr3l_set)):
+                        cv2.drawContours(blurori_img, sorted_contours1, i, (255,255,0), thickness = 2)
+                    else:
+                        cv2.drawContours(blurori_img, sorted_contours1, i, (0,0,255), thickness = 2)
     return (result_list, blurori_img)
 ########################################################### IMAGE ANALYSIS - END ###################################################################
 
@@ -291,7 +308,7 @@ def mainscreen():
     global mainscreen_labelframe
     mainscreen_labelframe = LabelFrame(root, bg='white', width=800, height=600)
     mainscreen_labelframe.place(x=0,y=0)
-    sidebar_labelframe = LabelFrame(mainscreen_labelframe, bg='dodger blue', width=170, height=478)
+    sidebar_labelframe = LabelFrame(mainscreen_labelframe, font=("Courier",15,'bold'), bg='dodger blue', width=170, height=478)
     sidebar_labelframe.place(x=0,y=0)
 
     def home_click():
@@ -1235,10 +1252,20 @@ def setid():
         else:
             sheet['B2']='POSC'
             sheet['F6']='NEGC'
+
+        try:
+            subprocess.Popen(['killall','florence'])
+        except:
+            pass
+        root.attributes('-fullscreen', False)
+        subprocess.Popen('florence',stdout=subprocess.PIPE, shell=True)
+        subprocess.Popen('florence',stdout=subprocess.PIPE, shell=True)
+
         if(setid48clicked==1):
             f = filedialog.asksaveasfilename(initialdir='/home/pi/Desktop/Spotcheck ID/48 wells/',defaultextension='.xlsx')
         else:
             f = filedialog.asksaveasfilename(initialdir='/home/pi/Desktop/Spotcheck ID/25 wells/',defaultextension='.xlsx')
+
         if f is None:
             return
         workbook.save(f)
@@ -1696,6 +1723,7 @@ def scanposition():
         scanresult_labelframe.place(x=248,y=60)
 
         label = list(range(48))
+        global id_list
         def result_table(range_a, range_b, row_value):
             global samples
             j=-1
@@ -1717,13 +1745,17 @@ def scanposition():
                     t='G'+ str(i-35)
                 if(i>=42):
                     t='H'+ str(i-41)
-                if(pos_result[i]<=15):
-                    label[i] = Label(scanresult_labelframe, bg='gainsboro', text=t, width=5, height=2)
+                if(id_list[i]=='N/A'):
+                    label[i] = Label(scanresult_labelframe, bg='white', text=t, width=5, height=2)
                     label[i].grid(row=row_value,column=j,padx=3,pady=3)
                 else:
-                    label[i] = Label(scanresult_labelframe, bg='OliveDrab1', text=t, width=5, height=2)
-                    label[i].grid(row=row_value,column=j,padx=3,pady=3)
-                    samples += 1
+                    if(pos_result[i]<=8):
+                        label[i] = Label(scanresult_labelframe, bg='gainsboro', text=t, width=5, height=2)
+                        label[i].grid(row=row_value,column=j,padx=3,pady=3)
+                    else:
+                        label[i] = Label(scanresult_labelframe, bg='OliveDrab1', text=t, width=5, height=2)
+                        label[i].grid(row=row_value,column=j,padx=3,pady=3)
+                        samples += 1
         scanposition_progressbar['value'] = 100
         root.update_idletasks()
 
@@ -1801,20 +1833,20 @@ def analysis():
             analysis_labelframe.place_forget()
             mainscreen()
 
-    def pause_click():
-        try:
-            camera.close()
-        except:
-            pass
-        global ser
-        if(pause_button['text']=='Pause'):
-            send_data ='P'
-            ser.write(send_data.encode())
-            pause_button['text']= 'Continue'
-        else:
-            send_data ='R'
-            ser.write(send_data.encode())
-            pause_button['text']= 'Pause'
+    # def pause_click():
+#         try:
+#             camera.close()
+#         except:
+#             pass
+#         global ser
+#         if(pause_button['text']=='Pause'):
+#             send_data ='P'
+#             ser.write(send_data.encode())
+#             pause_button['text']= 'Continue'
+#         else:
+#             send_data ='R'
+#             ser.write(send_data.encode())
+#             pause_button['text']= 'Pause'
 
     # pause_button = Button(analysis_labelframe, bg="lavender", font=("Courier",12,'bold'), text="Pause" , height=3, width=10, borderwidth=0, command=pause_click)
 #     pause_button.place(x=450,y=390)
@@ -1846,8 +1878,10 @@ def analysis():
                 wait = 1
                 break
 
+    global id_list
     while(wait==1):
         if(ser.in_waiting>0):
+            global t1_run, t2_run, t3_run
             receive_data = ser.readline().decode('utf-8',errors='ignore').rstrip()
             #print("Data received:", receive_data)
             if(receive_data!='C1' and receive_data!='C2' and receive_data!='C3'):
@@ -1856,6 +1890,9 @@ def analysis():
                 root.update()
 
             if(receive_data=='C1'):
+                t1_run=1
+                t2_run=0
+                t3_run=0
                 print("Data received:", receive_data)
                 t1wait_label.place_forget()
                 t1_labelframe['bg'] = atk.DEFAULT_COLOR
@@ -1884,7 +1921,7 @@ def analysis():
 
                 t1_analysis = Image.open(output)
                 #t1_crop = t1_analysis.crop((start_point[0]-7, start_point[1]-7, end_point[0]+7, end_point[1]+7))
-                t1_crop = t1_analysis.crop((279-7, 81-7, 496+7, 376+7))
+                t1_crop = t1_analysis.crop((280-7, 81-7, 498+7, 376+7))
                 crop_width, crop_height = t1_crop.size
                 scale_percent = 75
                 width = int(crop_width * scale_percent / 100)
@@ -1931,12 +1968,18 @@ def analysis():
                     if(i>=42):
                         pos = str(chr(65+i-41)) + "9"
 
-                    sheet[pos] = t1_result[i]
+                    if(id_list[i]=='N/A'):
+                        sheet[pos] = 'N/A'
+                    else:
+                        sheet[pos] = t1_result[i]
 
                 global path3
                 workbook.save(path3+"/T1.xlsx")
 
             if(receive_data=='C2'):
+                t1_run=0
+                t2_run=1
+                t3_run=0
                 print("Data received:", receive_data)
                 t2wait_label.place_forget()
                 t2_labelframe['bg'] = atk.DEFAULT_COLOR
@@ -1959,7 +2002,7 @@ def analysis():
                 cv2.imwrite(output, t2_image)
                 t2_analysis = Image.open(output)
                 #t2_crop = t2_analysis.crop((start_point[0]-7, start_point[1]-7, end_point[0]+7, end_point[1]+7))
-                t2_crop = t2_analysis.crop((279-7, 81-7, 496+7, 376+7))
+                t2_crop = t2_analysis.crop((280-7, 81-7, 498+7, 376+7))
                 crop_width, crop_height = t2_crop.size
                 scale_percent = 75
                 width = int(crop_width * scale_percent / 100)
@@ -2008,11 +2051,17 @@ def analysis():
                     if(i>=42):
                         pos = str(chr(65+i-41)) + "9"
 
-                    sheet[pos] = t2_result[i]
+                    if(id_list[i]=='N/A'):
+                        sheet[pos] = 'N/A'
+                    else:
+                        sheet[pos] = t2_result[i]
 
                 workbook.save(path3+"/T2.xlsx")
 
             if(receive_data=='C3'):
+                t1_run=0
+                t2_run=0
+                t3_run=1
                 print("Data received:", receive_data)
                 t3wait_label.place_forget()
                 t3_labelframe['bg'] = atk.DEFAULT_COLOR
@@ -2035,7 +2084,7 @@ def analysis():
                 cv2.imwrite(output, t3_image)
                 t3_analysis = Image.open(output)
                 #t3_crop = t3_analysis.crop((start_point[0]-7, start_point[1]-7, end_point[0]+7, end_point[1]+7))
-                t3_crop = t3_analysis.crop((279-7, 81-7, 496+7, 376+7))
+                t3_crop = t3_analysis.crop((280-7, 81-7, 498+7, 376+7))
                 crop_width, crop_height = t3_crop.size
                 scale_percent = 75
                 width = int(crop_width * scale_percent / 100)
@@ -2088,9 +2137,16 @@ def analysis():
                     if(i>=42):
                         pos = str(chr(65+i-41)) + "9"
 
-                    sheet[pos] = t3_result[i]
+                    if(id_list[i]=='N/A'):
+                        sheet[pos] = 'N/A'
+                    else:
+                        sheet[pos] = t3_result[i]
 
                 workbook.save(path3+"/T3.xlsx")
+
+                t1_run=0
+                t2_run=0
+                t3_run=0
 
                 workbook = Workbook()
                 sheet = workbook.active
@@ -2184,7 +2240,6 @@ def analysis():
                 sheet["L10"].font = font2
                 sheet["L10"].fill = PatternFill(start_color='00EFEFEF', end_color='00EFEFEF', fill_type='solid')
 
-                global id_list
                 for i in range (11,35):
                     if(i<17):
                         if(i==11):
@@ -2265,7 +2320,7 @@ def analysis():
                             if(t1_result[i-11]>float(thr1_set) and t2_result[i-11]>float(thr2_set) and t3_result[i-11]<=float(thr3l_set)):
                                 sheet['D'+str(i)] = 'N'
                                 sheet['D'+str(i)].fill = PatternFill(start_color='0000FF00', end_color='0000FF00', fill_type='solid')
-                            if(t1_result[i-11]>float(thr1_set) and t2_result[i-11]>float(thr2_set) and t3_result[i-11]>float(thr3l_set) and t3_result[i]<=float(thr3h_set)):
+                            if(t1_result[i-11]>float(thr1_set) and t2_result[i-11]>float(thr2_set) and t3_result[i-11]>float(thr3l_set) and t3_result[i-11]<=float(thr3h_set)):
                                 sheet['D'+str(i)] = 'R'
                                 sheet['D'+str(i)].fill = PatternFill(start_color='0000FFFF', end_color='0000FFFF', fill_type='solid')
                             if(t1_result[i-11]>float(thr1_set) and t2_result[i-11]>float(thr2_set) and t3_result[i-11]>float(thr3h_set)):
